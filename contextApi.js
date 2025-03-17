@@ -8,6 +8,7 @@ Steps to Use Context API:
 */
 
 // inside Context folder, create ThemeContext.tsx
+// Create Context
 //
 import { createContext, useState } from "react";
 
@@ -28,6 +29,7 @@ export const ThemeProvider = ({ children }) => {
 };
 
 // in ThemeToggle.tsx component
+// Consume Context
 import { useContext } from "react";
 import { ThemeContext } from "./context/ThemeContext";
 
@@ -52,6 +54,7 @@ const ThemeToggle = () => {
 export default ThemeToggle;
 
 // in App component
+// Provide Context
 import "./App.css";
 
 import { ThemeProvider } from "./context/ThemeContext";
