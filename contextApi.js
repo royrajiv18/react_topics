@@ -1,39 +1,74 @@
 /* The Context API in React is a feature that allows you to manage and share state or 
 data globally across a component tree, without needing to pass props manually at every level.
+
+Steps to Use Context API:
+- Create Context
+- Provide Context
+- Consume Context
 */
 
-// inside Context folder, create UserContext.js
-
+// inside Context folder, create ThemeContext.tsx
+// Create Context
 //
-import React, { createContext, useContext, useState } from "react";
+import { createContext, useState } from "react";
 
-export const UserContext = createContext();
+export const ThemeContext = createContext();
 
-export function UserProvider({ children }) {
-  const [user] = useState({ name: "John", age: 30 });
-  return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
-}
+export const ThemeProvider = ({ children }) => {
+  const [theme, setTheme] = useState("light");
 
-// in GrandChild component - refer propsdrilling.js
-import React, { useContext } from "react";
-import UserContext from "./Context/Usercontext";
+  const toggleTheme = () => {
+    setTheme(theme === "light" ? "dark" : "light");
+  };
 
-const GrandChild = () => {
-  const user = useContext(UserContext);
   return (
-    <div>
-      <h1>GrandChild</h1>
-      <p>Name: {user.name}</p>
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
+};
+
+// in ThemeToggle.tsx component
+// Consume Context
+import { useContext } from "react";
+import { ThemeContext } from "./context/ThemeContext";
+
+const ThemeToggle = () => {
+  const { theme, toggleTheme } = useContext(ThemeContext);
+
+  return (
+    <div
+      style={{
+        background: theme === "light" ? "#fff" : "#333",
+        color: theme === "light" ? "#000" : "#fff",
+        padding: "20px",
+        textAlign: "center",
+      }}
+    >
+      <p>Current Theme: {theme}</p>
+      <button onClick={toggleTheme}>Toggle Theme</button>
     </div>
   );
 };
 
-// in App component
-import Parent from "./Parent";
+export default ThemeToggle;
 
-return (
-  <UserProvider>
-    <Parent />
-  </UserProvider>
-);
+// in App component
+// Provide Context
+import "./App.css";
+
+import { ThemeProvider } from "./context/ThemeContext";
+import ThemeToggle from "./ThemeToggle";
+
+const App = () => {
+  return (
+    <ThemeProvider>
+      <div>
+        <h1>React Context API Example</h1>
+        <ThemeToggle />
+      </div>
+    </ThemeProvider>
+  );
+};
+
 export default App;
