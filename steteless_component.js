@@ -1,4 +1,4 @@
-// Statefull component
+// Stateless component
 
 import React from "react";
 
